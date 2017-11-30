@@ -1,0 +1,6 @@
+#images {
+    list-style-type: none;
+    width:100px;
+    border: 1px solid red;
+    margin: 10px;
+}

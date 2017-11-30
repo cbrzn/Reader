@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Uploading Files</title>
+
+</head>
+<body>
+	<h1>Upload file</h1>
+	<h3>Name<input type = "text" name = "names" id="texxxt"/></h3>
+	<div>
+		Upload: <input type="file" id="file"/> <button onclick="upload()">Upload one file</button>
+		<h3 id="uploadStatus"></h3>
+	</div>
+	<div>
+	Upload more than one file: <input type="file" multiple id="files"/> <button onclick="mulUpload()">Upload files</button>
+		<h3 id="uploadStatus"></h3>
+	</div>
+	<hr />
+	<div>
+		<button onclick="download()">Download</button>	
+		<img id="myImg" alt=""/>	
+	</div>
+	<!--<img src="Img/Untitled.png"/>-->
+	<script src="js/load.js"></script>
+</body>
+</html>
