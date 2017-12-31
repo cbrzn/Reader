@@ -50,28 +50,30 @@ public class Register extends HttpServlet {
 		if(session.isNew()) {
 			if(db.checkNewUser(reqBody.getString("email")) == true) {
 				json.put("status", "you have an account already, please log in");
-				storeValue(reqBody.getString("email"), reqBody.getString("pass"), reqBody.getBoolean("admin"), session);
+				storeValue(reqBody.getString("email"), reqBody.getString("username"), reqBody.getString("pass"), reqBody.getBoolean("admin"), session);
 				session.invalidate();
 			} else {
-				json.put("status", "Log in successful");
-				storeValue(reqBody.getString("email"), reqBody.getString("pass"), reqBody.getBoolean("admin"), session);
-				db.insertUser(reqBody.getString("email"), reqBody.getString("pass"), reqBody.getBoolean("admin")); 
+				json.put("status", "200");
+				storeValue(reqBody.getString("email"), reqBody.getString("username"), reqBody.getString("pass"), reqBody.getBoolean("admin"), session);
+				db.insertUser(reqBody.getString("email"), reqBody.getString("username"), reqBody.getString("pass"), reqBody.getBoolean("admin")); 
 			}
 		} else {
 			json.put("status", "you are registered already");
-			storeValue(reqBody.getString("email"), reqBody.getString("pass"), reqBody.getBoolean("admin"), session);
+			storeValue(reqBody.getString("email"), reqBody.getString("username"), reqBody.getString("pass"), reqBody.getBoolean("admin"), session);
 			session.invalidate(); 
 		}
 		out.println(json.toString());
 	}
 	
-	private void storeValue(String email, String password, boolean admin, HttpSession session) {
+	private void storeValue(String email, String username, String password, boolean admin, HttpSession session) {
 		if(email == null) {
 			session.setAttribute("email", "");
+			session.setAttribute("username", "");
 			session.setAttribute("password", "");
 			session.setAttribute("admin", "");
 		} else {
 			session.setAttribute("email", email);
+			session.setAttribute("username", username);
 			session.setAttribute("password", password);
 			session.setAttribute("admin", admin);
 		}

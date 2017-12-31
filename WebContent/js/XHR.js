@@ -1,85 +1,87 @@
 function XHR() {
 
-	var jsonToParams = json => {
-		var res = "";
-		for (var attr in json) {
-			if (res === "") {
-				res = attr + "=" + json[attr];
-			} else {
-				res += "&" + attr + "=" + json[attr];
+	var jsonToParams= function(json){
+		var res="";
+		for (var attr in json){
+			if (res===""){
+				res=attr+"="+json[attr];
+			}
+			else{
+				res+="&"+attr+"="+json[attr];
 			}
 		}
 		return res;
 	};
+    var xmlObject = null;
+    const xhr = (method,url,params,headers) => {
+        return new Promise((res, rej) => {
+            try {
+                xmlObject = new XMLHttpRequest();
+                xmlObject.open(method, url, true);
+                xmlObject.onload = () => {
+                    if (xmlObject.status >= 200 && xmlObject.status < 300) {
+                        res(JSON.parse(xmlObject.responseText));
+                    } else {
+                        rej({
+                            status: xmlObject.status,
+                            statusText: xmlObject.statusText
+                        });
+                    }
+                };
 
-	this.send = function(method, url, params, headers) { 
-		return new Promise(function(fullfill, reject) {
-			var wrapper = new XMLHttpRequest();
-			wrapper.open(method, url);
-			wrapper.onload = function()  {
-				if (this.status == 200) {
-					fullfill(JSON.parse(wrapper.responseText));
-				} else {
-					reject({ status: this.status, statusText: wrapper.statusText });
-				}
-			};
+                for (var header in headers) {
+                    xmlObject.setRequestHeader(header, headers[header]);
+                }
+                if (method === 'POST') {
+                    xmlObject.send(JSON.stringify(params));
+                }
+                else{
+                	xmlObject.send();
+                }
+                
 
-			for (var header in headers) {
-				wrapper.setRequestHeader(header, headers[header]);
-			}
+            } catch (err) {
+                console.log('error');
+                rej(err);
+            }
+        });
+    }
+    this.get = (url,params,headers) => {
+        return new Promise((res, rej) => {
+        	params=typeof params==="string"?
+        	params:jsonToParams(params);
+        	url+="?"+params;
+            xhr('GET', url,params,headers).then((data) => {
+                res(data);
+            });
+        });
 
-			if (method === 'POST') {
-				wrapper.send(JSON.stringify(params));
-			} else {
-				wrapper.send();
-			}
-		});
-	}
-
-	this.get = function(url, params, headers) {
-		params=typeof params==="string" ? params : jsonToParams(params);
-		url += "?" + params;
-		this.send('GET', url, params, headers)
-			.then(function(data) {
-				console.log(data);
-				})
-			.catch(function(error) {
-				console.log(error);
-			})
-	}
-
-	this.post = function(url, params, headers) {
-		this.send('POST', url, params, headers)
-			.then(function(data) {
-				if(data.status == ("200")) {
-					window.location.href = "./index.html";
-					alert("Log in successful")
-				} else {
-					alert("Wrong password or email");
-				}
-				console.log(data);
-			})
-			.catch(function(error) {
-				console.log(error);
-			})
-	}
-	
-	this.img = function(url, params, headers) {
-		this.send('GET', url, params, headers)
-			.then(function(data) {
-				for (var i=0; i<data.length;i++) {	
-					var div = document.getElementById("images");
-					var elem = document.createElement("img");
-					elem.src = "Img/" + data[i].path;
-					elem.setAttribute("height", "300");
-					elem.setAttribute("width", "300");
-					elem.style.padding = "60px 20px";
-					div.appendChild(elem);		
-					}
-
-				})
-			.catch(function(error) {
-				console.log(error);
-			})
-	}
+    }
+    this.post = (url,params,headers) => {
+        return new Promise((res, rej) => {
+            xhr('POST', url,params,headers).then((data) => {
+                res(data);
+            });
+        });
+    }
+    this.put = (url,params,headers) => {
+        return new Promise((res, rej) => {
+        	params=typeof params==="string"?
+            params:jsonToParams(params);
+            url+="?"+params;
+            xhr('PUT', url,params,headers).then((data) => {
+                res(data);
+            });
+        });
+    }
+    this.del = (url,params,headers) => {
+        return new Promise((res, rej) => {
+        	params=typeof params==="string"?
+            params:jsonToParams(params);
+            url+="?"+params;
+            xhr('DELETE', url,params,headers).then((data) => {
+            	res(data);
+            });
+        });
+    }
 }

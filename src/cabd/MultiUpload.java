@@ -50,12 +50,12 @@ public class MultiUpload extends HttpServlet {
 		InputStream filecontent = null;
 		OutputStream os = null;
 		Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "cesar5683072");
-		String ses = (String) request.getSession(false).getAttribute("email");
+		int ses = (int) request.getSession(false).getAttribute("user_id");
 		String name = request.getParameter("names");
 		try {
-			String baseDir = "C:\\Users\\cesar\\Documents\\Proyectos Java\\WEB2\\Reader\\WebContent\\Img";
+			String baseDir = "C:\\Users\\cesar\\Documents\\Proyectos Java\\WEB2\\Reader\\WebContent\\Series";
 			for (int i=0; i < files.size(); i++) {
-				db.insertImg(name+i, ses, this.getFileName(files.get(i)));
+				db.insertImg(name+i, ses, "test", this.getFileName(files.get(i)));
 			}
 			System.out.println(files);
 			for (Part file : files) {

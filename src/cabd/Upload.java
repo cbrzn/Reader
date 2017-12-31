@@ -51,10 +51,10 @@ public class Upload extends HttpServlet {
 		InputStream filecontent = file.getInputStream();
 		OutputStream os = null;
 		Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "cesar5683072");
-		String ses = (String) request.getSession(false).getAttribute("email");
+		int ses = (int) request.getSession(false).getAttribute("user_id");
 		try {
-			String baseDir = "C:\\Users\\cesar\\Documents\\Proyectos Java\\WEB2\\Reader\\WebContent\\Img";
-			db.insertImg(request.getParameter("names"), ses, this.getFileName(file));
+			String baseDir = "C:\\Users\\cesar\\Documents\\Proyectos Java\\WEB2\\Reader\\WebContent\\Series";
+			db.insertImg(request.getParameter("names"), ses, "test", this.getFileName(file));
 			os = new FileOutputStream(baseDir + "/" + this.getFileName(file));
 			int read = 0;
 			byte[] bytes = new byte[1024];
