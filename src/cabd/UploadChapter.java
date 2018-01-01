@@ -48,7 +48,7 @@ public class UploadChapter extends HttpServlet {
 		InputStream filecontent = null;
 		HttpSession session = request.getSession();
 		OutputStream os = null;
-		Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "cesar5683072");
+		Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "maricoelquelolea");
 		String name = request.getParameter("names");
 		String number = request.getParameter("numbers");
 		int index = Integer.parseInt(number);

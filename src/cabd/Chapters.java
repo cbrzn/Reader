@@ -69,7 +69,7 @@ public class Chapters extends HttpServlet {
 		int serie_id = reqBody.getInt("serie_id");
 		System.out.println(serie_id);
 		try {
-			Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "cesar5683072");
+			Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "maricoelquelolea");
 			db.pstmt = db.con.prepareStatement("SELECT * FROM chapters WHERE serie_id=?");
 		    db.pstmt.setInt(1, serie_id);
 		    db.rs = db.pstmt.executeQuery();

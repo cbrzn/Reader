@@ -46,7 +46,7 @@ public class Register extends HttpServlet {
 		HttpSession session = request.getSession();
 		JSONObject reqBody = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		JSONObject json = new JSONObject();
-		Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "cesar5683072");
+		Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "maricoelquelolea");
 		if(session.isNew()) {
 			if(db.checkNewUser(reqBody.getString("email")) == true) {
 				json.put("status", "you have an account already, please log in");

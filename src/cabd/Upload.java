@@ -50,7 +50,7 @@ public class Upload extends HttpServlet {
 		Part file = request.getPart("file");
 		InputStream filecontent = file.getInputStream();
 		OutputStream os = null;
-		Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "cesar5683072");
+		Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "maricoelquelolea");
 		int ses = (int) request.getSession(false).getAttribute("user_id");
 		try {
 			String baseDir = "C:\\Users\\cesar\\Documents\\Proyectos Java\\WEB2\\Reader\\WebContent\\Series";
