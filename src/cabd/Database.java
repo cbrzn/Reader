@@ -105,6 +105,23 @@ public class Database {
 		return st;
 	} 
 	
+	public boolean insertChapter(String title, int serie_id, int number, String path) {
+		boolean st = false;
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		try {
+			this.pstmt = con.prepareStatement("INSERT INTO chapters (title, serie_id, creation_time, number, path) VALUES (?, ?, ?, ?, ?)");
+			this.pstmt.setString(1, title);
+			this.pstmt.setInt(2, serie_id);
+			this.pstmt.setTimestamp(3, timestamp);
+			this.pstmt.setInt(4, number);
+			this.pstmt.setString(5, path);
+			this.pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace(); 
+		}
+		return st;
+	}
+	
 	public boolean isAdmin(String email) {
 		boolean st = false;
 		try {

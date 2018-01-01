@@ -63,6 +63,7 @@ public class Index extends HttpServlet {
         PrintWriter out = response.getWriter();
 		JSONObject reqBody = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		JSONObject json = new JSONObject();
+		HttpSession session = request.getSession();
 		int serie_id = reqBody.getInt("serie_id");
 		System.out.println(serie_id);
 		try {
@@ -77,6 +78,7 @@ public class Index extends HttpServlet {
 					.put("creation_time", db.rs.getTimestamp(4))
 					.put("synopsis", db.rs.getString(5))
 					.put("path", db.rs.getString(6));
+				session.setAttribute("serie_id", db.rs.getInt(1));
 				}
 		} catch (Exception e) {
 			e.printStackTrace();

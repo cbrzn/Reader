@@ -44,7 +44,8 @@ public class Login extends HttpServlet {
 				.put("status", "logged in")
 				.put("password", session.getAttribute("password"))
 				.put("email", session.getAttribute("email"))
-				.put("user_id", session.getAttribute("user_id"));
+				.put("user_id", session.getAttribute("user_id"))
+				.put("serie_id", session.getAttribute("serie_id"));
 		}
 		out.print(json.toString());
 	}
