@@ -153,5 +153,63 @@ public class Database {
 			}
 		return id;
 	}
+	
+	public boolean comment_chapter(String comment, int chapter_id, int user_id) {
+		boolean st = false;
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		try {
+			this.pstmt = con.prepareStatement("INSERT INTO comments_chapter (content, user_id, chapter_id, creation_time) VALUES (?, ?, ?, ?)");
+			this.pstmt.setString(1, comment);
+			this.pstmt.setInt(3, chapter_id);
+			this.pstmt.setInt(2, user_id);
+			this.pstmt.setTimestamp(4, timestamp);
+			this.pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace(); 
+		}
+		return st;
+	}
+	
+	public boolean comment_serie(String comment, int serie_id, int user_id) {
+		boolean st = false;
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		try {
+			this.pstmt = con.prepareStatement("INSERT INTO comments_serie (content, user_id, serie_id, creation_time) VALUES (?, ?, ?, ?)");
+			this.pstmt.setString(1, comment);
+			this.pstmt.setInt(3, serie_id);
+			this.pstmt.setInt(2, user_id);
+			this.pstmt.setTimestamp(4, timestamp);
+			this.pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace(); 
+		}
+		return st;
+	}
+	
+	public boolean like_chapter(int chapter_id, int user_id) {
+		boolean st = false;
+		try {
+			this.pstmt = con.prepareStatement("INSERT INTO likes_chapter (user_id, chapter_id) VALUES (?, ?)");
+			this.pstmt.setInt(2, chapter_id);
+			this.pstmt.setInt(1, user_id);
+			this.pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace(); 
+		}
+		return st;
+	}
+	
+	public boolean like_serie(int serie_id, int user_id) {
+		boolean st = false;
+		try {
+			this.pstmt = con.prepareStatement("INSERT INTO likes_serie (user_id, serie_id) VALUES (?, ?)");
+			this.pstmt.setInt(2, serie_id);
+			this.pstmt.setInt(1, user_id);
+			this.pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace(); 
+		}
+		return st;
+	}
 }
 				
