@@ -3,7 +3,7 @@ package basic;
 public class SingleDatabase {
 
 	private String username = "postgres";
-	private String password = "cesar5683072";
+	private String password = "maricoelquelolea";
 	private String url = "jdbc:postgresql://localhost:5432/Reader";
 	private String driver = "org.postgresql.Driver";
 		
