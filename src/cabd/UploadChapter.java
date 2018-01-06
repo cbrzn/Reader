@@ -46,17 +46,17 @@ public class UploadChapter extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		ArrayList<Part> files = (ArrayList<Part>) request.getParts();
 		InputStream filecontent = null;
-		HttpSession session = request.getSession();
 		OutputStream os = null;
-		Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "cesar5683072");
+		Database db = new Database();
 		String name = request.getParameter("names");
 		String number = request.getParameter("numbers");
+		String serie = request.getParameter("serie_id");
 		int index = Integer.parseInt(number);
-		int ses = (int) request.getSession(false).getAttribute("serie_id");
+		int serie_id = Integer.parseInt(serie);
 		try {
 			String baseDir = "C:\\Users\\cesar\\Documents\\Proyectos Java\\WEB2\\Reader\\WebContent\\chapters";
 			for (int i=0; i < files.size(); i++) {
-				db.insertChapter(name+i, ses, index+i, this.getFileName(files.get(i)));
+				db.insertChapter(name+i, serie_id, index+i, this.getFileName(files.get(i)));
 			}
 			System.out.println(files);
 			for (Part file : files) {

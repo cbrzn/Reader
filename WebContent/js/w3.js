@@ -30,9 +30,29 @@ function $(id) {
     return document.getElementById(id);
 };
 
-
+function log(){
+    var xhr = new XHR();
+    xhr.get('./Session',{},{}).then((data)=>{
+       console.log(data.status);
+     if (data.status != "not_logged"){
+         $('login').style.display = "none";
+         $('signup').style.display = "none";
+         $('logout').addEventListener('click', function() {
+         	xhr.get('./Logout',{},{}).then((data)=> {
+         		window.location.href = "./index.html";
+         		alert("you have logged out");
+         	}) 
+          });
+      } else {
+         $('home').style.display = "none";
+         $('upload').style.display = "none";
+         $('logout').style.display = "none";         
+     }
+  });
+};
 addEventListener('load', function() {
   w3.includeHTML();
 });
 
+addEventListener('load', log);
 

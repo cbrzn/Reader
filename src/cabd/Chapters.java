@@ -9,9 +9,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import basic.PermProxy;
+import basic.Permison;
 
 /**
  * Servlet implementation class Chapters
@@ -36,10 +40,10 @@ public class Chapters extends HttpServlet {
 				PrintWriter out = response.getWriter();
 				JSONArray json = new JSONArray();
 				try {
-					Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "cesar5683072");
+					Database db = new Database();
 					db.pstmt = db.con.prepareStatement("SELECT * FROM chapters WHERE serie_id=?");
-				    db.pstmt.setInt(1, 47);
-				    db.rs = db.pstmt.executeQuery();
+
+					db.rs = db.pstmt.executeQuery();
 					while (db.rs.next()) {
 						JSONObject obj = new JSONObject();
 						obj.put("id", db.rs.getInt(1));
@@ -66,10 +70,12 @@ public class Chapters extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		JSONObject reqBody = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
 		JSONArray json = new JSONArray();
+		JSONArray array = new JSONArray();
 		int serie_id = reqBody.getInt("serie_id");
-		System.out.println(serie_id);
+        HttpSession session = request.getSession();
 		try {
-			Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "cesar5683072");
+			Database db = new Database();
+			Permison perm = new PermProxy();
 			db.pstmt = db.con.prepareStatement("SELECT * FROM chapters WHERE serie_id=?");
 		    db.pstmt.setInt(1, serie_id);
 		    db.rs = db.pstmt.executeQuery();
@@ -83,6 +89,22 @@ public class Chapters extends HttpServlet {
 				obj.put("path", db.rs.getString(6));
 				json.put(obj);
 				System.out.println(json);
+			}
+			
+			if (session.isNew()) {
+				JSONObject a = perm.logged(session.isNew());
+				session.invalidate();
+				array.put(a);
+			} else {
+				boolean test = (boolean) request.getSession(false).getAttribute("admin");
+				int id = (int) request.getSession(false).getAttribute("user_id");
+				JSONObject a = perm.admin(test);
+				JSONObject c = new JSONObject();
+				JSONObject b = perm.not_logged(session.isNew());
+				c.put("current_user", id);
+				array.put(b)
+					.put(c)
+					.put(a);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

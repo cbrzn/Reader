@@ -1,3 +1,4 @@
+
 package cabd;
 
 import java.io.FileOutputStream;
@@ -49,7 +50,7 @@ public class MultiUpload extends HttpServlet {
 		ArrayList<Part> files = (ArrayList<Part>) request.getParts();
 		InputStream filecontent = null;
 		OutputStream os = null;
-		Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "cesar5683072");
+		Database db = new Database();
 		int ses = (int) request.getSession(false).getAttribute("user_id");
 		String name = request.getParameter("names");
 		try {

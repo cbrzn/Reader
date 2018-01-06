@@ -9,6 +9,8 @@ import java.sql.Timestamp;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import basic.SingleDatabase;
+
 public class Database {
 	
 	protected ResultSet rs;
@@ -18,10 +20,11 @@ public class Database {
 	protected PreparedStatement pstmt;
 	protected Connection con;
 	
-	public Database(String jdbc,String host,String port, String db, String user, String pass){
+	public Database(){
 		try {
-			Class.forName("org.postgresql.Driver");
-			this.con= DriverManager.getConnection("jdbc:"+jdbc+"://"+host+":"+port+"/"+db,user,pass);
+			SingleDatabase dbase = SingleDatabase.getInstance();
+			Class.forName(dbase.getDriver());
+			con = DriverManager.getConnection(dbase.getUrl(), dbase.getUsername(), dbase.getPassword());
 		}
 		catch(Exception e){
 			e.getStackTrace();
@@ -92,11 +95,11 @@ public class Database {
 		return st;
 	}
 	
-	public boolean checkImg(String name) {
+	public boolean checkImg(int name) {
 		boolean st = false; 
 		try {
-			this.pstmt = con.prepareStatement("SELECT * FROM series WHERE name=?");
-		    this.pstmt.setString(1, name);
+			this.pstmt = con.prepareStatement("SELECT * FROM chapters WHERE id=?");
+		    this.pstmt.setInt(1, name);
 			this.rs = this.pstmt.executeQuery();
 			st = this.rs.next();
 		} catch (Exception e) { 
@@ -104,6 +107,8 @@ public class Database {
 		}
 		return st;
 	} 
+	
+	
 	
 	public boolean insertChapter(String title, int serie_id, int number, String path) {
 		boolean st = false;
@@ -152,6 +157,22 @@ public class Database {
 				e.printStackTrace();
 			}
 		return id;
+	}
+	
+	public String chapter_path(int id) {
+		String path = "";
+		try {
+			this.pstmt = this.con.prepareStatement("SELECT path FROM chapters WHERE id=?");
+		    this.pstmt.setInt(1, id);
+			this.rs = this.pstmt.executeQuery();
+				while (this.rs.next()) 		
+					path = this.rs.getString("path");
+				return path;
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		return path;
 	}
 	
 	public boolean comment_chapter(String comment, int chapter_id, int user_id) {

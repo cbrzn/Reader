@@ -2,27 +2,30 @@ package cabd;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONObject;
 
+import basic.PermProxy;
+import basic.Permison;
+
 /**
- * Servlet implementation class LikeSerie
+ * Servlet implementation class Session
  */
-@WebServlet("/LikeSerie")
-public class LikeSerie extends HttpServlet {
+@WebServlet("/Session")
+public class Session extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public LikeSerie() {
+    public Session() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -31,23 +34,32 @@ public class LikeSerie extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		PrintWriter out = response.getWriter();	
+		JSONObject json = new JSONObject();
+		HttpSession session = request.getSession();
+		if (session.isNew()) {
+			session.invalidate();
+			json.put("status", "not_logged");
+		} else {
+		boolean test = (boolean) request.getSession(false).getAttribute("admin");
+		Permison perm = new PermProxy();
+		try {
+			JSONObject a = perm.admin(test);
+			json = a;
+		} catch (Exception e) {
+			e.printStackTrace();
+			}
+		}
+		out.println(json.toString());
+		System.out.println("json=" +json);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		PrintWriter out = response.getWriter();
-		JSONObject reqBody = new JSONObject(request.getReader().lines().collect(Collectors.joining(System.lineSeparator())));
-		JSONObject json = new JSONObject();
-		int serie_id = reqBody.getInt("serie_id");
-		int ses = (int) request.getSession(false).getAttribute("user_id");
-		Database db = new Database();
-		if (db.like_serie(serie_id, ses))
-			json.put("status", "200");
-		out.println(json);	
+		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

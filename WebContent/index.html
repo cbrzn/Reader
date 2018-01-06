@@ -7,9 +7,22 @@
     </head>
     <body>
       <div w3-include-html="./layout/header.html"></div>
+      <div id="test">
         <h1><div id='title'>All movies</div></h1>
           <div class="wrapper" id="images">
           </div>
+        </div>
+           <div id="load_form" class="login-page" style="display: none;">
+			<h1>Upload chapters</h1>
+					<input type = "text" name = "names" id="texxxt" placeholder="name"/>
+						<div id="serie">
+						<input name="numbers" type="number" id="index" placeholder="index"/>
+							Upload more than one file: <input type="file" multiple id="files"/> <button id="load">Upload files</button>
+							<h3 id="uploadStatus"></h3>
+						</div>
+			        </div>
+				<hr />
+				
           <script src="./js/series.js"></script>
   </body>
 </html>

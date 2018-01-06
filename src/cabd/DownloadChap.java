@@ -11,19 +11,17 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.json.JSONObject;
-
 /**
- * Servlet implementation class GetFile
+ * Servlet implementation class DownloadChap
  */
-@WebServlet("/Download")
-public class Download extends HttpServlet {
+@WebServlet("/DownloadChap")
+public class DownloadChap extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Download() {
+    public DownloadChap() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -32,21 +30,24 @@ public class Download extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// Find this file id in database to get file name, and file type
-
+		Database db = new Database();
+		String chapter = request.getParameter("chapter_id");
+		int chapter_id = Integer.parseInt(chapter);
+        response.setHeader("Content-disposition","attachment; filename="+db.chapter_path(chapter_id));
+        // You must tell the browser the file type you are going to send
+        // for example application/pdf, text/plain, text/html, image/jpg
         response.setContentType("file");
-		String path = request.getParameter("path");
-		String serie = request.getParameter("serie_id");
 
         // Make sure to show the download dialog
-        response.setHeader("Content-disposition","attachment; filename="+path);
-		Database db = new Database();
 
         // Assume file name is retrieved from database
-        // For example D:\\file\\test.pdf
-		int serie_id = Integer.parseInt(serie);
-        if (db.checkImg(serie_id) == true) {
-        	File my_file = new File("C:\\Users\\cesar\\Documents\\Proyectos Java\\WEB2\\Reader\\WebContent\\Series"+path);
+        // For example D:\\file\\test.pdf		
+        String path = db.chapter_path(chapter_id);
+        System.out.println(db.checkImg(chapter_id));
+        System.out.println(chapter_id);
+        if (db.checkImg(chapter_id) == true) {
+        	File my_file = new File("C:\\Users\\cesar\\Documents\\Proyectos Java\\WEB2\\Reader\\WebContent\\chapters\\"+path);
+        	System.out.println(my_file);
 	        // This should send the file to browser
 	        OutputStream out = response.getOutputStream();
 	        FileInputStream in = new FileInputStream(my_file);
@@ -59,6 +60,7 @@ public class Download extends HttpServlet {
 	        out.flush();
         }
 	}
+	/**
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */

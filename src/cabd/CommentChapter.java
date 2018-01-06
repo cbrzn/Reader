@@ -46,7 +46,7 @@ public class CommentChapter extends HttpServlet {
 				int chapter_id = reqBody.getInt("chapter_id");
 				String comment = reqBody.getString("comment");
 				int ses = (int) request.getSession(false).getAttribute("user_id");
-				Database db = new Database("postgresql", "localhost", "5432", "Reader", "postgres", "cesar5683072");
+				Database db = new Database();
 				if (db.comment_chapter(comment, chapter_id, ses))
 					json.put("status", "200");
 				out.println(json);	
